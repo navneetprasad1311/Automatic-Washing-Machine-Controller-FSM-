@@ -465,15 +465,15 @@ endmodule</pre>
 ![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/5b5eadbb3de3025bd66cdce9c1f03da9e69e7ac9/Images/Pin%20Mapping.png)
 
 
-[FPGA Implementation Video]()
+[FPGA Implementation Video](https://drive.google.com/file/d/1yKLBYIlEADwbqf714S7J8AJVHJkgVWCo/view?usp=sharing)
 
 ---
 
 ## 👥 Contributors
 
-[Navneet Prasad]()
+[Navneet Prasad](https://www.linkedin.com/navneetprasad1311)
 
-[Akash P]( )
+[Akash P](https://www.linkedin.com/in/akash-p-092423309)
 
 ## Notes
 
