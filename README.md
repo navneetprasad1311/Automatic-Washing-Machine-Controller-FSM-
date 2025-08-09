@@ -462,7 +462,7 @@ endmodule</pre>
 
 ## 💫 Implementation
 
-![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/592fc4520df82c05d8770f3bcbafaf5553a9cdbc/Images/Zedboard.jpeg)
+![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/5b5eadbb3de3025bd66cdce9c1f03da9e69e7ac9/Images/Pin%20Mapping.png)
 
 
 [FPGA Implementation Video]()
