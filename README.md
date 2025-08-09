@@ -1,4 +1,4 @@
-# 🚿 Automatic Washing Machine Controller FSM
+# Automatic Washing Machine Controller FSM
 
 ## 📌 Project Overview
 This project implements a **Finite State Machine (FSM)** based controller for a **semi-automatic washing machine** using Verilog HDL. It simulates the sequential stages of the wash cycle and handles input signals like **start**, **pause**, **reset**, and **lid status**, with control outputs for **input valve** and **drain valve**.
