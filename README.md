@@ -471,9 +471,9 @@ endmodule</pre>
 
 ## 👥 Contributors
 
-[Navneet Prasad](https://www.linkedin.com/navneetprasad1311)
+Navneet Prasad, Bannari Amman Institute Of Technology ([LinkedIn](https://www.linkedin.com/navneetprasad1311))
 
-[Akash P](https://www.linkedin.com/in/akash-p-092423309)
+Akash P, Bannari Amman Institute Of Technology ([LinkedIn](https://www.linkedin.com/in/akash-p-092423309))
 
 ## Notes
 
