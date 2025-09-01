@@ -110,7 +110,8 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
 ![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/State%20Diagram.png)
 
 ## 🎨 design.v
-<pre> module AWMC(input c_in,
+``` verilog
+module AWMC(input c_in,
                   clk,  
                   reset,
                   start,
@@ -280,12 +281,14 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
             end 
         end
     end
-endmodule </pre>
+endmodule
+```
 
 ---
 
 ## 📝 Testbench
-<pre>`timescale 1ps/1ps
+``` verilog
+timescale 1ps/1ps
 
 module AWMC_tb();
     reg c_in, clk, reset, start, pause,lid;
@@ -363,7 +366,8 @@ module AWMC_tb();
 
     end
 
-endmodule</pre>
+endmodule
+```
 
 ---
 
