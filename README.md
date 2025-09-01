@@ -110,7 +110,8 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
 ![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/State%20Diagram.png)
 
 ## 🎨 design.v
-<pre> module AWMC(input clk,  
+<pre> module AWMC(input c_in,
+                  clk,  
                   reset,
                   start,
                   pause,
@@ -138,57 +139,11 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
     reg lidcond = 1'b0;
     reg pauser = 1'b0;
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge c_in or posedge reset) begin
         if(reset) begin
-            count <= 2'b00;
-            case (stage)
-                WASH : begin
-                    if(input_valve == 1'b1) begin
-                        input_valve <= 1'b0;
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count++;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                    else begin
-                        input_valve <= 1'b0;
-                        output_drain <= 1'b0;
-                    end
-                end
-                RINSE : begin
-                    if(input_valve == 1'b1 || output_drain == 1'b1) begin
-                        input_valve <= 1'b0;
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count++;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                end
-                SPIN : begin
-                    if(output_drain == 1'b1) begin
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count++;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                end
-                default : begin
-                    input_valve <= 1'b0;
-                    output_drain <= 1'b0;
-                end
-            endcase
+            count <= 4'd0;
+            input_valve <= 1'b0;
+            output_drain <= 1'b0;
             stage <= IDLE;
             prev_state <= IDLE;
             running <= 1'b0;
@@ -196,7 +151,7 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
             paused <= 1'b0;
             done <= 1'b0; 
         end
-        else begin
+        else if(clk) begin
             if(pause) begin
                 running <= 1'b0;
                 if(stage != IDLE) 
@@ -209,7 +164,7 @@ This project implements a **Finite State Machine (FSM)** based controller for a 
             else if(pauser) begin
                 if(stage != IDLE) 
                     prev_state <= stage;
-                if(prev_state == FILL && lid) begin
+                else if(prev_state == FILL && lid) begin
                     lidcond <= 1'b1;
                     pauser <= 1'b0;
                     times <= 1'b1;
@@ -333,13 +288,13 @@ endmodule </pre>
 <pre>`timescale 1ps/1ps
 
 module AWMC_tb();
-    reg clk, reset, start, pause, lid;
+    reg c_in, clk, reset, start, pause,lid;
     wire [2:0] stage;
     wire done;
     wire input_valve;
     wire output_drain;
 
-    AWMC uut(.clk(clk),.reset(reset),.start(start),.pause(pause),.stage(stage),.done(done),.lid(lid),.input_valve(input_valve),.output_drain(output_drain));
+    AWMC uut(.c_in(c_in),.clk(clk),.reset(reset),.start(start),.pause(pause),.stage(stage),.done(done),.lid(lid),.input_valve(input_valve),.output_drain(output_drain));
 
     initial begin
         reset = 1'b0;
@@ -347,10 +302,13 @@ module AWMC_tb();
         reset = 1'b1;
         #1
         reset = 1'b0;
+        c_in = 1'b0;
+        forever #5 c_in = ~c_in;
+     end
+     
+    initial begin   
         clk = 1'b0;
-
         forever #5 clk = ~clk;
-      
     end
 
     initial begin
@@ -411,7 +369,7 @@ endmodule</pre>
 
 ## 🧪 Simulation 
 
-📸 **Waveform**: ![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Waveform.jpg)
+📸 **Waveform**: ![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Behavioural%20Waveform.png)
 
 ---
 
@@ -426,12 +384,13 @@ endmodule</pre>
 
 ### ⚙️ Schematic View 
 
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Schematic%20View.png)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Schematic.png)
 
+---
 
 ### ⏹️ Technology View
 
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Technology%20View.jpg)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Technology%20Design.png)
 
 ---
 
@@ -443,24 +402,30 @@ endmodule</pre>
 
 ### ⛓️ Resource Utilization (Post-Implementation)
 
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Resource%20Utilisation.jpg)
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Resource%20Utilisation%202.png)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Resource%20Util%201.png)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Resource%20Util%202.png)
+
+---
+
+###  🌊 Functional Simulation (Post-Implementation)
+
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Post%20Implementation%20Waveform.png)
 
 ---
 
 ### ⏱️ Timing Summary
 
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Timing%20Summary.jpg)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Timing%20Summary.png)
 
 ---
 
 ### ⚡ Power Summary
 
-![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/87b593b565084cfb3729c1ad1eeb0b6131b790ac/Images/Power%20Summary.jpg)
+![Image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/dbe6414f1f463ed88f98e75a7eed5c31ae2bb864/Images/Power%20Summary.png)
 
 ---
 
-## 💫 Implementation
+## 💫 FPGA Implementation
 
 ![image](https://github.com/navneetprasad1311/Automatic-Washing-Machine-Controller-FSM-/blob/5b5eadbb3de3025bd66cdce9c1f03da9e69e7ac9/Images/Pin%20Mapping.png)
 
