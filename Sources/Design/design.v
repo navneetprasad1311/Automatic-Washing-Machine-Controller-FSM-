@@ -1,4 +1,5 @@
-module AWMC(input clk,  
+module AWMC(input c_in,
+                  clk,  
                   reset,
                   start,
                   pause,
@@ -26,57 +27,11 @@ module AWMC(input clk,
     reg lidcond = 1'b0;
     reg pauser = 1'b0;
 
-    always @(posedge clk or posedge reset) begin
+    always @(posedge c_in or posedge reset) begin
         if(reset) begin
-            count <= 2'b00;
-            case (stage)
-                WASH : begin
-                    if(input_valve == 1'b1) begin
-                        input_valve <= 1'b0;
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count <= count + 1'b1;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                    else begin
-                        input_valve <= 1'b0;
-                        output_drain <= 1'b0;
-                    end
-                end
-                RINSE : begin
-                    if(input_valve == 1'b1 || output_drain == 1'b1) begin
-                        input_valve <= 1'b0;
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count <= count + 1'b1;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                end
-                SPIN : begin
-                    if(output_drain == 1'b1) begin
-                        if(count < VALVE_DURATION) begin
-                                output_drain <= 1'b1;
-                                count <= count + 1'b1;
-                        end
-                        else begin
-                                output_drain <= 1'b0;
-                                count <= 2'b00;
-                        end
-                    end
-                end
-                default : begin
-                    input_valve <= 1'b0;
-                    output_drain <= 1'b0;
-                end
-            endcase
+            count <= 4'd0;
+            input_valve <= 1'b0;
+            output_drain <= 1'b0;
             stage <= IDLE;
             prev_state <= IDLE;
             running <= 1'b0;
@@ -84,7 +39,7 @@ module AWMC(input clk,
             paused <= 1'b0;
             done <= 1'b0; 
         end
-        else begin
+        else if(clk) begin
             if(pause) begin
                 running <= 1'b0;
                 if(stage != IDLE) 
@@ -97,7 +52,7 @@ module AWMC(input clk,
             else if(pauser) begin
                 if(stage != IDLE) 
                     prev_state <= stage;
-                if(prev_state == FILL && lid) begin
+                else if(prev_state == FILL && lid) begin
                     lidcond <= 1'b1;
                     pauser <= 1'b0;
                     times <= 1'b1;

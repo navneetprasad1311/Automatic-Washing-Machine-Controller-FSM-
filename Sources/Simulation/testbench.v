@@ -1,13 +1,13 @@
 `timescale 1ps/1ps
 
 module AWMC_tb();
-    reg clk, reset, start, pause, lid;
+    reg c_in, clk, reset, start, pause,lid;
     wire [2:0] stage;
     wire done;
     wire input_valve;
     wire output_drain;
 
-    AWMC uut(.clk(clk),.reset(reset),.start(start),.pause(pause),.stage(stage),.done(done),.lid(lid),.input_valve(input_valve),.output_drain(output_drain));
+    AWMC uut(.c_in(c_in),.clk(clk),.reset(reset),.start(start),.pause(pause),.stage(stage),.done(done),.lid(lid),.input_valve(input_valve),.output_drain(output_drain));
 
     initial begin
         reset = 1'b0;
@@ -15,10 +15,13 @@ module AWMC_tb();
         reset = 1'b1;
         #1
         reset = 1'b0;
+        c_in = 1'b0;
+        forever #5 c_in = ~c_in;
+     end
+     
+    initial begin   
         clk = 1'b0;
-
         forever #5 clk = ~clk;
-      
     end
 
     initial begin
